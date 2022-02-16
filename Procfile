@@ -1,1 +1,1 @@
-web: LC_ALL=en_US.utf8 exec proxybroker --log DEBUG serve --port $PORT --types HTTP HTTPS --lvl High
+web: LC_ALL=en_US.utf8 exec sh -c "mkdir proxies; python3 -m http.server $PORT -d proxies& while true; do proxybroker find --types HTTP HTTPS SOCKS4 SOCKS5 --lvl high -l 500 | sed -e 's/<Proxy.*\[\([^]]*\)\] \([^>]*\)>/\1 \2/' -e 's/: [^[:space:]]*,\?//' | tee proxies/proxies.txt; sleep 5m; done"
